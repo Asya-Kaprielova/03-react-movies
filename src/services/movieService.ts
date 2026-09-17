@@ -1,25 +1,25 @@
 import axios from 'axios';
 import type { Movie } from '../types/movie';
 
-// Тип для відповіді від TMDB API
-interface FetchMoviesResponse {
+interface SearchMoviesResponse {
   page: number;
   results: Movie[];
   total_pages: number;
   total_results: number;
 }
 
-// Отримуємо токен/ключ із змінних середовища
-const API_KEY = import.meta.env.VITE_TMDB_TOKEN;
 const BASE_URL = 'https://api.themoviedb.org/3';
+const TOKEN = import.meta.env.VITE_TMDB_TOKEN;
 
 export const fetchMovies = async (query: string): Promise<Movie[]> => {
-  const response = await axios.get<FetchMoviesResponse>(
+  const response = await axios.get<SearchMoviesResponse>(
     `${BASE_URL}/search/movie`,
     {
       params: {
-        api_key: API_KEY,
-        query: query,
+        query,
+      },
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
       },
     }
   );
